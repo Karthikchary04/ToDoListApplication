@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do API Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<h1>To Do List</h1>
+<button onclick="fetchTasks()">Get All Tasks</button>
+<button onclick="showCheckboxesOnSelect()">Select</button>
+<button onclick="deleteSelectedTasks()">Delete Tasks</button>
+<div id="tasks"></div>
+<div id="deletedSelectedTasksMessage"></div>
+
+<p>Fetch Task By Task ID</p>
+<input type="text" id="taskId" placeholder="Task ID" required>
+<button onclick="fetchTaskById()">Go</button>
+<p>Task Details:</p>
+<div id="fetchedTask"></div>
+
+<p>Delate Task</p>
+<input type="text" id="taskIdToDelete" placeholder="Task ID" required>
+<button onclick="deleteTask()">Delete</button>
+<div id="deleteMessage"></div>
+
+<h2>Create Task</h2>
+<form id="taskForm">
+    <input type="text" id="title" placeholder="Title" required/><br/>
+    <textarea id="description" placeholder="Description" required></textarea><br/>
+    <input type="date" id="dueDate" name="Due Date" placeholder="Due Date" required> <br/>
+    <input type="text" id="category" placeholder="Catergory" required><br/>
+    <button type="submit">Create Task</button>
+    <div id="taskCreatedMessage"></div>
+</form>
+
+
+
+<script>
+    function fetchTasks() {
+        fetch('/api/tasks')
+            .then(response => response.json())
+            .then(data => {
+                const tasksDiv = document.getElementById('tasks');
+                const currentDate = new Date();
+
+                const taskItems = data.map(task => {
+                    const dueDate = new Date(task.dueDate);
+                    const isOverdue = dueDate < currentDate;
+
+                    const redXIcon = isOverdue
+                        ? `<i class="fas fa-times" style="color: red; margin-left: 8px;"></i>`
+                        : '';
+                    return `<li>
+                        <input type="checkbox" name="taskCheckbox" value="${task.id}" style="display: none;"/>
+                        ${task.id} - ${task.title} - ${task.description} - ${task.dueDate} - ${task.category.categoryname}
+                        ${redXIcon}
+                    </li>`;
+                }).join('');
+                tasksDiv.innerHTML = `<ul>${taskItems}</ul>`;
+            })
+            .catch(error => console.error('Error fetching tasks:', error));
+    }
+
+    document.getElementById('taskForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const dueDate = document.getElementById('dueDate').value;
+        const category = document.getElementById("category").value;
+
+        fetch('/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ title, description, completed: false, dueDate, category : { categoryname : category }})
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Task created:', data);
+            const taskCreatedMessage = document.getElementById('taskCreatedMessage');
+            taskCreatedMessage.innerHTML = '<p style="color: green;"> Task Created </p>';
+            //fetchTasks();
+        })
+        .catch(error => console.error('Error creating task:', error));
+    });
+
+    function fetchTaskById() {
+      const taskId = document.getElementById('taskId').value;
+      fetch(`/api/tasks/${taskId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+      })
+      .then(response => {
+          if (!response.ok) throw new Error('Task not found');
+          return response.json();
+      })
+      .then(data => {
+          const fetchedTask = document.getElementById('fetchedTask');
+          fetchedTask.innerHTML = `ID: ${data.id} - Title: ${data.title} - Description: ${data.description} - Due Date: ${data.dueDate}`;
+      })
+      .catch(error => {
+          console.error('Error fetching task:', error);
+      });
+    }
+
+    function showCheckboxesOnSelect() {
+        document.querySelectorAll('input[name="taskCheckbox"]').forEach(cb => {
+            cb.style.display = cb.style.display === 'none' ? 'inline-block' : 'none';
+        });
+    }
+
+    function deleteTask() {
+          const id = document.getElementById('taskIdToDelete').value;
+          fetch(`/api/tasks/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+        .then(response => {
+          if (!response.ok) throw new Error('Task not found');
+          return response.text(); // No JSON body needed for DELETE success
+        })
+        .then(() => {
+          document.getElementById('deleteMessage').innerHTML = `<p style="color: green;">Deleted!</p>`;
+        })
+        .catch(error => {
+          console.error('Error deleting task:', error);
+          document.getElementById('deleteMessage').innerHTML = `<p style="color: red;">${error.message}</p>`;
+        });
+    }
+
+    function deleteSelectedTasks() {
+        const tasksToDelete = document.querySelectorAll('input[name="taskCheckbox"]:checked');
+        const idsToDelete = Array.from(tasksToDelete).map(tasks => tasks.value)
+        fetch(`/api/tasks/delete-multiple-tasks`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(idsToDelete)
+        })
+        .then(response => {
+            if(!response.ok) throw new Error('Tasks Not Found');
+            return response.text();
+        })
+        .then(() => {
+            document.getElementById('deletedSelectedTasksMessage').innerHTML = `<p style="color: green;">Deleted!</p>`;
+            fetchTasks();
+        })
+        .catch(error => {
+          console.error('Error deleting task:', error);
+          document.getElementById('deleteMessage').innerHTML = `<p style="color: red;">${error.message}</p>`;
+        });
+    }
+
+</script>
+</body>
+<style>
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+
+  h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    margin: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+  }
+
+  #tasks ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  #tasks li {
+    background: white;
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  #tasks li.overdue {
+    border-left: 6px solid #e74c3c;
+  }
+
+  #tasks li input[type="checkbox"] {
+    margin-right: 12px;
+    transform: scale(1.2);
+  }
+
+  .task-info {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  .task-actions {
+    margin-left: auto;
+  }
+
+  form {
+    background: white;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 20px auto;
+  }
+
+  #taskCreatedMessage,
+  #deleteMessage,
+  #deletedSelectedTasksMessage {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  #fetchedTask {
+    background: #ecf0f1;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    max-width: 500px;
+  }
+
+  @media (max-width: 600px) {
+    #tasks li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    button {
+      width: 100%;
+      margin: 8px 0;
+    }
+  }
+</style>
+</html>
