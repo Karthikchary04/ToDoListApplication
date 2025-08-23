@@ -1,0 +1,132 @@
+<style>
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+
+  h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    margin: 5px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #2980b9;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+  }
+
+  #tasks ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  #tasks li {
+    background: white;
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  #tasks li.overdue {
+    border-left: 6px solid #e74c3c;
+  }
+
+  #tasks li input[type="checkbox"] {
+    margin-right: 12px;
+    transform: scale(1.2);
+  }
+
+  .task-info {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  .task-actions {
+    margin-left: auto;
+  }
+
+  form {
+    background: white;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 20px auto;
+  }
+
+  #taskCreatedMessage,
+  #deleteMessage,
+  #deletedSelectedTasksMessage {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  #fetchedTask {
+    background: #ecf0f1;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    max-width: 500px;
+  }
+
+  @media (max-width: 600px) {
+    #tasks li {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    button {
+      width: 100%;
+      margin: 8px 0;
+    }
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 200px;
+    border: 1px solid #ccc;
+    z-index: 1;
+  }
+  .dropdown-content.show {
+    display: block;
+  }
+
+</style>

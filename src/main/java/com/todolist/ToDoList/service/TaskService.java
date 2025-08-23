@@ -13,5 +13,6 @@ public interface TaskService {
     Task createTask(Task task);
     Task updateTask(Long id, Task task);
     void deleteTask(Long id);
-    void createCategory(Category category);
+    Category createCategory(String category);
+    List<Category> getCategories();
 }

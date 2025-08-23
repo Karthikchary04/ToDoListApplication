@@ -57,7 +57,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createCategory(Category category) {
-        categoryRepository.save(category);
+    public Category createCategory(String categoryName) {
+        final Category category = new Category();
+        category.setCategoryname(categoryName);
+        try {
+            return categoryRepository.save(category);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Category already exists");
+        }
+    }
+
+    @Override
+    public List<Category> getCategories() {
+        return categoryRepository.findAll();
     }
 }
