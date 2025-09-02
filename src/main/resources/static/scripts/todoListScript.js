@@ -44,7 +44,7 @@
             }
         })
         .then(() => {
-            console.log('Task created:', data);
+            console.log('Task created');
             const taskCreatedMessage = document.getElementById('taskCreatedMessage');
             taskCreatedMessage.innerHTML = '<p style="color: green;"> Task Created </p>';
             //fetchTasks();
@@ -161,8 +161,9 @@
         const select = document.getElementById('selectCategory');
         categories.forEach( category => {
             const option = document.createElement('option');
-            option.value = category.id;
+            option.value = category.categoryname;
             option.textContent = category.categoryname;
+            option.id = 'category';
             select.appendChild(option);
         });
     }
