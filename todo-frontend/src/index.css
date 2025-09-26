@@ -1,0 +1,381 @@
+/* Register page styles - matches login page */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  padding: 20px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.register-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--btn-gradient-start), var(--btn-gradient-end));
+}
+
+.register-card h2 {
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.register-form .form-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-form .form-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.register-form .btn-primary {
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  background: linear-gradient(90deg, var(--btn-gradient-start), var(--btn-gradient-end));
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.register-form .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.register-form .btn-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.todo-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: black;
+}
+
+.todo-container h1 {
+  margin-bottom: 16px;
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+}
+
+.todo-container h2 {
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0069d9;
+}
+
+.btn-fetch {
+  margin-bottom: 20px;
+}
+
+
+.create-task form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.create-task input[type="text"] {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.create-task input[type="text"]:focus {
+  border-color: #007bff;
+}
+
+.create-task button {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-task button:hover {
+  background-color: #218838;
+}
+
+
+:root {
+  --accent-start: #6366f1;   /* indigo */
+  --accent-end:   #06b6d4;   /* teal */
+  --bg-card:      #ffffff;
+  --text-primary: #1f2937;   /* nearly black */
+  --text-secondary: #4b5563; /* slate */
+  --bg-meta:      #f3f4f6;   /* light gray */
+}
+
+/* Container for cards */
+.task-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Individual task card */
+.task-card {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 16px 20px 20px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.task-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent-start), var(--accent-end));
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.task-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Task title and checkbox */
+.task-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.task-title .checkbox {
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* Description text */
+.task-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.4;
+  max-height: 3.6em;  /* ~3 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Footer meta row */
+.task-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Category badge */
+.category-badge {
+  background: #e0e7ff;      /* light indigo */
+  color: #4338ca;           /* dark indigo */
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  text-transform: capitalize;
+}
+
+/* Due date pill */
+.due-date {
+  background: var(--bg-meta);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 9999px;
+}
+
+:root {
+  --bg-gradient-start: #4f46e5;    /* indigo */
+  --bg-gradient-end:   #0ea5e9;    /* sky blue */
+  --card-bg:           #ffffff;
+  --text-dark:         #1f2937;
+  --text-light:        #ffffff;
+  --input-border:      #cbd5e1;
+  --input-focus:       #4f46e5;
+  --btn-gradient-start:#5eead4;    /* teal */
+  --btn-gradient-end:  #14b8a6;    /* emerald */
+}
+
+/* Full-screen container with gradient background */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  padding: 20px;
+}
+
+/* The elevated login card */
+.login-card {
+  width: 100%;
+  max-width: 360px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Accent stripe on top of card */
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--btn-gradient-start), var(--btn-gradient-end));
+}
+
+/* Card header */
+.login-card h2 {
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+/* Form layout */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Input fields */
+.login-form .form-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-form .form-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Submit button */
+.login-form .btn-primary {
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  background: linear-gradient(90deg, var(--btn-gradient-start), var(--btn-gradient-end));
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.login-form .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.login-form .btn-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do API Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<h1>To Do List</h1>
+<button onclick="fetchTasks()">Get All Tasks</button>
+<button onclick="deleteSelectedTasks()">Delete Tasks</button>
+<div id="tasks"></div>
+
+<p>Fetch Task By Task ID</p>
+<input type="text" id="taskId" placeholder="Task ID" required>
+<button onclick="fetchTaskById()">Go</button>
+<p>Task Details:</p>
+<div id="fetchedTask"></div>
+
+<p>Delate Task</p>
+<input type="text" id="taskIdToDelete" placeholder="Task ID" required>
+<button onclick="deleteTask()">Delete</button>
+<div id="deleteMessage"></div>
+
+<h2>Create Task</h2>
+<form id="taskForm">
+    <input type="text" id="id" placeholder="Task ID" required>
+    <input type="text" id="title" placeholder="Title" required/><br/>
+    <textarea id="description" placeholder="Description" required></textarea><br/>
+    <input type="date" id="dueDate" name="Due Date" placeholder="Due Date" required> <br/>
+    <button type="submit">Create Task</button>
+    <div id="taskCreatedMessage"></div>
+</form>
+
+
+
+<script>
+    function fetchTasks() {
+        fetch('/api/tasks')
+            .then(response => response.json())
+            .then(data => {
+                const tasksDiv = document.getElementById('tasks');
+                const currentDate = new Date();
+
+                const taskItems = data.map(task => {
+                    const dueDate = new Date(task.dueDate);
+                    const isOverdue = dueDate < currentDate;
+
+                    const redXIcon = isOverdue
+                        ? `<i class="fas fa-times" style="color: red; margin-left: 8px;"></i>`
+                        : '';
+
+                    return `<li>
+                        <input type="checkbox" value="${task.id}" name="taskCheckbox" />
+                        ${task.id} - ${task.title} - ${task.description} - ${task.dueDate}
+                        ${redXIcon}
+                    </li>`;
+                }).join('');
+                tasksDiv.innerHTML = `<ul>${taskItems}</ul>`;
+            })
+            .catch(error => console.error('Error fetching tasks:', error));
+    }
+
+    function fetchTasks() {
+        fetch('/api/tasks')
+            .then(response => response.json())
+            .then(data => {
+                const tasksDiv = document.getElementById('tasks');
+                const currentDate = new Date();
+                const taskList = data.map(task => {
+                    const dueDate = new Date(task.dueDate)
+                    const overdueIcon = dueDate < currentDate ? `<i class="fas fa-times" style="color: red; margin-left: 10px;"></i>` : '';
+                    return `<li>${task.id} - ${task.title} - ${task.description} - ${task.dueDate} ${overdueIcon}</li>`
+                    }).join('')
+                tasksDiv.innerHTML = `<ul>${taskList}</ul>`;
+            })
+            .catch(error => console.error('Error fetching tasks:', error));
+    }
+
+    document.getElementById('taskForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const dueDate = document.getElementById('dueDate').value;
+        const id = document.getElementById('id').value;
+
+        fetch('/api/tasks', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ title, description, completed: false, dueDate, id})
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Task created:', data);
+            const taskCreatedMessage = document.getElementById('taskCreatedMessage');
+            taskCreatedMessage.innerHTML = '<p style="color: green;"> Task Created </p>';
+            //fetchTasks();
+        })
+        .catch(error => console.error('Error creating task:', error));
+    });
+
+    function fetchTaskById() {
+      const taskId = document.getElementById('taskId').value;
+      fetch(`/api/tasks/${taskId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+      })
+      .then(response => {
+          if (!response.ok) throw new Error('Task not found');
+          return response.json();
+      })
+      .then(data => {
+          const fetchedTask = document.getElementById('fetchedTask');
+          fetchedTask.innerHTML = `ID: ${data.id} - Title: ${data.title} - Description: ${data.description} - Due Date: ${data.dueDate}`;
+      })
+      .catch(error => {
+          console.error('Error fetching task:', error);
+      });
+    }
+
+    function deleteTask() {
+          const id = document.getElementById('taskIdToDelete').value;
+          fetch(`/api/tasks/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+        .then(response => {
+          if (!response.ok) throw new Error('Task not found');
+          return response.text(); // No JSON body needed for DELETE success
+        })
+        .then(() => {
+          document.getElementById('deleteMessage').innerHTML = `<p style="color: green;">Deleted!</p>`;
+        })
+        .catch(error => {
+          console.error('Error deleting task:', error);
+          document.getElementById('deleteMessage').innerHTML = `<p style="color: red;">${error.message}</p>`;
+        });
+    }
+
+</script>
+</body>
+</html>
